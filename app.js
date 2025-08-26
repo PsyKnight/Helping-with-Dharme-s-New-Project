@@ -127,7 +127,15 @@ app.delete("/listing/:id", wrapAsync(async(req,res)=>{
 
 }));
 
-app.all("*",(req,res,next)=>{
+// There is a problem with express 5+, it's using path-to-regexp library, and they changed the rules.
+//
+// Instead of using:
+//
+// .get('/**', xxxx) / .get('/*', xxxx)
+// Use this workaround:
+//
+// .get('/*\w', xxxx)
+app.all(/(.*)/,(req,res,next)=>{
     next(new ExpressError(404,"page not found"));
 });
 
